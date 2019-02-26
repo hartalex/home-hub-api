@@ -9,6 +9,7 @@ var http = require('http')
 //var forceSsl = require('express-force-ssl')
 //var key = fs.readFileSync('/etc/ssl/private/ssl-hub.hartcode.com.key')
 //var cert = fs.readFileSync( '/etc/ssl/certs/ssl-hub.hartcode.com.crt' )
+const cors = require('cors')
 const logging = new winston.Logger({
   transports: [ new winston.transports.Console({ timestamp: true }) ]
 })
@@ -17,7 +18,9 @@ var options = {
   //	key: key,
   //	cert: cert
 }
+
 const app = express()
+app.use(cors())
 app.use(
   expressWinston.logger({
     transports: [

@@ -1,13 +1,14 @@
 var expressWinston = require('express-winston')
 var express = require('express')
 var apiRoutes = require('./api/routes/routes')
+const cors = require('cors')
 const winston = require('winston')
 const app = express()
 
 const logging = new winston.Logger({
   transports: [ new winston.transports.Console({ timestamp: true }) ]
 })
-
+app.use(cors())
 app.use(
   expressWinston.logger({
     transports: [
