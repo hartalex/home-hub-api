@@ -1,10 +1,10 @@
-[![Build Status](https://travis-ci.org/hartalex/temperature_hub.svg?branch=master)](https://travis-ci.org/hartalex/temperature_hub)
-[![Code Climate](https://codeclimate.com/github/hartalex/temperature_hub/badges/gpa.svg)](https://codeclimate.com/github/hartalex/temperature_hub)
-[![Test Coverage](https://codeclimate.com/github/hartalex/temperature_hub/badges/coverage.svg)](https://codeclimate.com/github/hartalex/temperature_hub/coverage)
-[![Dependencies](https://david-dm.org/hartalex/temperature_hub.svg)]()
+[![Build Status](https://travis-ci.org/hartalex/home-hub-api.svg?branch=master)](https://travis-ci.org/hartalex/home-hub-api)
+[![Code Climate](https://codeclimate.com/github/hartalex/home-hub-api/badges/gpa.svg)](https://codeclimate.com/github/hartalex/home-hub-api)
+[![Test Coverage](https://codeclimate.com/github/hartalex/home-hub-api/badges/coverage.svg)](https://codeclimate.com/github/hartalex/home-hub-api/coverage)
+[![Dependencies](https://david-dm.org/hartalex/home-hub-api.svg)]()
 [![NSP Status](https://nodesecurity.io/orgs/hartalex/projects/e1564956-d9af-4630-ade4-645c3c5e1bf5/badge)](https://nodesecurity.io/orgs/hartalex/projects/e1564956-d9af-4630-ade4-645c3c5e1bf5)
 
-# Temperature_Hub
+# home-hub-api
 
 This project currently contains 3 pieces, these may be seperated into seperate
 projects in the future.
@@ -18,7 +18,7 @@ projects in the future.
   is meant to be scheduled as a cron job to run every minute, hour, or however
   often you need.
 
-![System](https://raw.githubusercontent.com/hartalex/temperature_hub/master/system.png)
+![System](https://raw.githubusercontent.com/hartalex/home-hub-api/master/system.png)
 
 - Web site Has two pages with graphs of historical temperature data.
   /sensors.html - One graph containing all temperature data.

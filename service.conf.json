@@ -2,11 +2,11 @@
   "kind": "Service",
   "apiVersion": "v1",
   "metadata": {
-    "name": "temperature-hub"
+    "name": "home-hub-api"
   },
   "spec": {
     "selector": {
-      "app": "temperature-hub"
+      "app": "home-hub-api"
     },
     "ports": [
       {

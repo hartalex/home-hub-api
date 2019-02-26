@@ -2,9 +2,9 @@
   "apiVersion": "apps/v1",
   "kind": "Deployment",
   "metadata": {
-    "name": "temperature-hub",
+    "name": "home-hub-api",
     "labels": {
-      "app": "temperature-hub",
+      "app": "home-hub-api",
       "version": "v1"
     }
   },
@@ -12,20 +12,20 @@
     "replicas": 2,
     "selector": {
       "matchLabels": {
-        "app": "temperature-hub"
+        "app": "home-hub-api"
       }
     },
     "template": {
       "metadata": {
         "labels": {
-          "app": "temperature-hub"
+          "app": "home-hub-api"
         }
       },
       "spec": {
         "containers": [
           {
             "name": "application",
-            "image": "gcr.io/hartonline-cloud/temperature-hub:(TRAVIS_COMMIT)",
+            "image": "gcr.io/hartonline-cloud/home-hub-api:(TRAVIS_COMMIT)",
             "resources": {
               "limits": {
                 "cpu": ".1",
@@ -37,7 +37,7 @@
                 "name": "slackUrl",
                 "valueFrom": {
                   "secretKeyRef": {
-                    "name": "temperature-hub-secret",
+                    "name": "home-hub-api-secret",
                     "key": "slackUrl"
                   }
                 }
@@ -46,7 +46,7 @@
                 "name": "wunderground_key",
                 "valueFrom": {
                   "secretKeyRef": {
-                    "name": "temperature-hub-secret",
+                    "name": "home-hub-api-secret",
                     "key": "wunderground_key"
                   }
                 }
@@ -55,7 +55,7 @@
                 "name": "openweathermap_key",
                 "valueFrom": {
                   "secretKeyRef": {
-                    "name": "temperature-hub-secret",
+                    "name": "home-hub-api-secret",
                     "key": "openweathermap_key"
                   }
                 }

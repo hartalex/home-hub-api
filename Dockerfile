@@ -9,7 +9,5 @@ WORKDIR /home/nodejs/app
 COPY ./package.json .
 RUN npm install --production
 COPY ./build ./build
-COPY ./views ./views
 EXPOSE 8220
-EXPOSE 443
 ENTRYPOINT ["npm","run", "prodstart"]

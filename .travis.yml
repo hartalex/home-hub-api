@@ -9,7 +9,7 @@ stages:
     if: type IN (push, pull_request)
   - name: releaseContainer
     if: branch IN (test, prod, master) and type = push
-services: 
+services:
   - docker
 node_js:
   - "11.9.0"
@@ -25,7 +25,7 @@ jobs:
         - ./scripts/releaseContainer.sh
         - npm run cleanOldContainers
 notifications:
-    slack: hartcode:GqPCaLxnPqXfPJBMjJbEvG81
+  slack: hartcode:GqPCaLxnPqXfPJBMjJbEvG81
 addons:
   code_climate:
-    repo_token: 6f1ad54db4b7278e83e68592bcbc67c149c9a3a41543adec8f640737f8e00b2d
+    repo_token: d0aa36e8c84a642e7e62babded8aa4bf8a1658e02aeec1aec2d6137d3d77b7d8
