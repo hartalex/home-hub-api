@@ -1,5 +1,5 @@
 #!/bin/bash
-openssl aes-256-cbc -K $encrypted_71512d77c8b2_key -iv $encrypted_71512d77c8b2_iv -in secrets.tar.enc -out secrets.tar -d
+openssl aes-256-cbc -K $encrypted_b8b7ce0ad967_key -iv $encrypted_b8b7ce0ad967_iv -in secrets.tar.enc -out secrets.tar -d
 tar xvf secrets.tar
 if [ ! -d ${HOME}/google-cloud-sdk ]; then
   rm -rf $HOME/google-cloud-sdk;
