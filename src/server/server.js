@@ -1,4 +1,3 @@
-import path from 'path'
 var expressWinston = require('express-winston')
 var express = require('express')
 var apiRoutes = require('./api/routes/routes')
