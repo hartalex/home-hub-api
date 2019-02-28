@@ -34,7 +34,9 @@ const buttonList = require('./button/GetButtonPresses.js')
 const jsonParser = bodyParser.json()
 const logging = require('winston')
 
-module.exports = function (app, mymongodb) {
+import { getButtonCount } from '../button.js'
+
+module.exports = function (app, mymongodb, io) {
   if (typeof mymongodb === 'undefined') {
     mymongodb = mongodb
   }
@@ -96,7 +98,14 @@ module.exports = function (app, mymongodb) {
       app.get('/memory/list/:date', cache(3600), memoryList)
 
       // button
-      app.post('/button', jsonParser, buttonAdd)
+      var buttonSocket = io.of('/buttonSocket').on('connection', function (socket) {
+        getButtonCount(dbobj).then((buttonCount) => {
+          console.log(buttonCount)
+          socket.emit('button', buttonCount)
+        })
+      })
+
+      app.post('/button', jsonParser, buttonAdd(buttonSocket))
       app.get('/button', cache(1), buttonList)
 
       app.get('/info', info)

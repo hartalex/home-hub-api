@@ -1,12 +1,15 @@
 var expressWinston = require('express-winston')
 var express = require('express')
 var apiRoutes = require('./api/routes/routes')
+const http = require('http')
 const cors = require('cors')
 const winston = require('winston')
 const app = express()
+const server = http.Server(app)
+const io = require('socket.io')(server)
 
 const logging = new winston.Logger({
-  transports: [ new winston.transports.Console({ timestamp: true }) ]
+  transports: [new winston.transports.Console({ timestamp: true })]
 })
 app.use(cors())
 app.use(
@@ -21,7 +24,7 @@ app.use(
   })
 )
 
-apiRoutes(app)
+apiRoutes(app, undefined, io)
   .then(function () {
     app.use(
       expressWinston.errorLogger({
@@ -34,7 +37,7 @@ apiRoutes(app)
         ]
       })
     )
-    app.listen(8080)
+    server.listen(8080)
   })
   .catch(function (err) {
     logging.log('error', 'server.js', err)

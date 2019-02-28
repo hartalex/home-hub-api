@@ -302,7 +302,7 @@ export function init (db, dbobj, config, slack) {
             })
         })
     },
-    buttonPress: (input) => {
+    buttonPress: (input, buttonSocket) => {
       const time = new Date()
       // Use connect method to connect to the Server
       var collection = 'button'
@@ -334,7 +334,17 @@ export function init (db, dbobj, config, slack) {
           button.count = 0
         }
         button.count++
-        return updateDataPromise({ $set: { id: 1, count: button.count } }, db, dbobj, { id: 1 }, collection, button)
+
+        return updateDataPromise(
+          { $set: { id: 1, count: button.count } },
+          db,
+          dbobj,
+          { id: 1 },
+          collection,
+          button
+        ).then((button) => {
+          buttonSocket.emit('button', button)
+        })
       })
     }
   }

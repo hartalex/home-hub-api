@@ -11,7 +11,7 @@ var http = require('http')
 //var cert = fs.readFileSync( '/etc/ssl/certs/ssl-hub.hartcode.com.crt' )
 const cors = require('cors')
 const logging = new winston.Logger({
-  transports: [ new winston.transports.Console({ timestamp: true }) ]
+  transports: [new winston.transports.Console({ timestamp: true })]
 })
 
 var options = {
@@ -20,6 +20,8 @@ var options = {
 }
 
 const app = express()
+const server = http.Server(app)
+const io = require('socket.io')(server)
 app.use(cors())
 app.use(
   expressWinston.logger({
@@ -35,7 +37,7 @@ app.use(
 //app.use(forceSsl)
 
 app.use(cache(300))
-apiRoutes(app)
+apiRoutes(app, undefined, io)
   .then(function () {
     app.use(
       expressWinston.errorLogger({
@@ -50,7 +52,7 @@ apiRoutes(app)
     )
     //https.createServer(options, app).listen(443)
 
-    http.createServer(app).listen(8220)
+    server.listen(8220)
   })
   .catch(function (err) {
     logging.log('error', 'server.prod.js', err)
