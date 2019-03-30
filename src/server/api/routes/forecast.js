@@ -16,5 +16,11 @@ module.exports = function (req, res, done) {
       res.json(resu.forecast)
       finish(done)
     }).catch(errorHandler(req, res, done))
+  } else {
+    res.status(500)
+      res.json({
+        result: 'fail',
+        reason: 'no wunderground key'
+      })
   }
 }
