@@ -1,10 +1,10 @@
+//require('es6-promise').polyfill()
 import jsonResponseHandler from '../../jsonResponseHandler'
-require('es6-promise').polyfill()
-require('isomorphic-fetch')
-const slackPost = require('../data/slack')
-const default_config = require('../../config')
-const finish = require('./done')
-const errorHandlerModule = require('./errorHandler')
+import fetch from 'isomorphic-fetch'
+import slackPost from '../data/slack'
+import default_config from '../../config'
+import finish from './done'
+import errorHandlerModule from './errorHandler'
 
 module.exports = function (req, res, done) {
   var config = req.config
@@ -18,11 +18,12 @@ module.exports = function (req, res, done) {
   const errorHandler = errorHandlerModule(slack)
   if (config.openweathermap_key !== '') {
     fetch(config.weatherUrl + '?zip=' + config.zipCode + ',us&units=imperial&APPID=' + config.openweathermap_key)
-    .then(jsonResponseHandler)
-    .then(function (resu) {
-      res.json(resu)
-      finish(done)
-    }).catch(errorHandler(req, res, done))
+      .then(jsonResponseHandler)
+      .then(function (resu) {
+        res.json(resu)
+        finish(done)
+      })
+      .catch(errorHandler(req, res, done))
   } else {
     const err = 'weather api key not found in configuration'
     errorHandler(req, res, done)(err)
