@@ -21,6 +21,7 @@ describe('weather', function () {
     fetch.mockResolvedValue(mockFetchReturnValue)
   })
   afterEach(() => {
+    finish.mockClear()
     fetch.mockClear()
   })
   describe('#function (req, res)', function () {
@@ -39,6 +40,7 @@ describe('weather', function () {
             'defaultWeather?zip=defaultZipCode,us&units=imperial&APPID=defaultOpenWeatherMapKey'
           )
           expect(jsonResponseHandler).toHaveBeenCalledWith(mockFetchReturnValue)
+          expect(res.status).toHaveBeenCalledWith(200)
           expect(res.json).toHaveBeenCalledWith(weatherMockData)
           expect(finish).toHaveBeenCalled()
           done()
@@ -66,6 +68,7 @@ describe('weather', function () {
             'passedWeather?zip=passedZipCode,us&units=imperial&APPID=passedOpenWeatherMapKey'
           )
           expect(jsonResponseHandler).toHaveBeenCalledWith(mockFetchReturnValue)
+          expect(res.status).toHaveBeenCalledWith(200)
           expect(res.json).toHaveBeenCalledWith(weatherMockData)
           expect(finish).toHaveBeenCalled()
           done()
@@ -83,6 +86,7 @@ describe('weather', function () {
 
         weather(req, res, () => {
           expect(slackPost).toHaveBeenCalledWith('defaultSlackUrl')
+          expect(errorHandlerModule).toHaveBeenCalled()
           done()
         })
       })
@@ -95,7 +99,6 @@ describe('weather', function () {
           json: jest.fn(),
           status: jest.fn()
         }
-
         weather(req, res, () => {
           expect(errorHandlerModule).toHaveBeenCalledWith(req.slack)
           done()
@@ -104,7 +107,8 @@ describe('weather', function () {
     })
 
     it('should error when the fetch fails', (done) => {
-      fetch.mockRejectedValue('error')
+      const fetchMockError = 'Mock error'
+      fetch.mockRejectedValue(fetchMockError)
       const req = {}
       const res = {
         json: jest.fn(),
@@ -113,8 +117,10 @@ describe('weather', function () {
 
       weather(req, res, () => {
         expect(errorHandlerModule).toHaveBeenCalled()
-        expect(errorFunc).toHaveBeenCalledWith('error')
-        expect(finish).toHaveBeenCalled()
+        expect(fetch).toHaveBeenCalledWith(
+          'defaultWeather?zip=defaultZipCode,us&units=imperial&APPID=defaultOpenWeatherMapKey'
+        )
+        expect(errorFunc).toHaveBeenCalledWith(fetchMockError)
         done()
       })
     })
@@ -129,8 +135,6 @@ describe('weather', function () {
       weather(req, res, () => {
         expect(errorHandlerModule).toHaveBeenCalled()
         expect(errorFunc).toHaveBeenCalledWith('weather api key not found in configuration')
-        expect(fetch).not.toHaveBeenCalled()
-        expect(finish).toHaveBeenCalled()
         done()
       })
     })
