@@ -7,8 +7,8 @@ import slackPost from '../data/slack'
 import errorHandlerModule, { errorFunc } from './errorHandler'
 import jsonResponseHandler from '../../jsonResponseHandler'
 import finish from './done'
-import weatherMockData from './weatherMockData'
-
+import weatherMockData from './__mocks__/weatherMockData'
+import res from './__mocks__/res'
 jest.mock('../data/slack')
 jest.mock('../../config')
 jest.mock('./errorHandler')
@@ -28,10 +28,6 @@ describe('weather', function () {
     describe('Config', async () => {
       it('should use default config when req.config is undefined', (done) => {
         const req = {}
-        const res = {
-          json: jest.fn(),
-          status: jest.fn()
-        }
 
         weather(req, res, () => {
           expect(slackPost).toHaveBeenCalledWith('defaultSlackUrl')
@@ -56,10 +52,6 @@ describe('weather', function () {
             weatherUrl: 'passedWeather'
           }
         }
-        const res = {
-          json: jest.fn(),
-          status: jest.fn()
-        }
 
         weather(req, res, () => {
           expect(slackPost).toHaveBeenCalledWith('passedSlackUrl')
@@ -79,10 +71,6 @@ describe('weather', function () {
     describe('Slack', async () => {
       it('should use create a slack object when req.slack is undefined', (done) => {
         const req = {}
-        const res = {
-          json: jest.fn(),
-          status: jest.fn()
-        }
 
         weather(req, res, () => {
           expect(slackPost).toHaveBeenCalledWith('defaultSlackUrl')
@@ -95,10 +83,6 @@ describe('weather', function () {
         const req = {
           slack: jest.fn()
         }
-        const res = {
-          json: jest.fn(),
-          status: jest.fn()
-        }
         weather(req, res, () => {
           expect(errorHandlerModule).toHaveBeenCalledWith(req.slack)
           done()
@@ -110,10 +94,6 @@ describe('weather', function () {
       const fetchMockError = 'Mock error'
       fetch.mockRejectedValue(fetchMockError)
       const req = {}
-      const res = {
-        json: jest.fn(),
-        status: jest.fn()
-      }
 
       weather(req, res, () => {
         expect(errorHandlerModule).toHaveBeenCalled()
@@ -127,10 +107,6 @@ describe('weather', function () {
 
     it('should error when openweathermap_key is not defined', (done) => {
       const req = { config: { openweathermap_key: '' } }
-      const res = {
-        json: jest.fn(),
-        status: jest.fn()
-      }
 
       weather(req, res, () => {
         expect(errorHandlerModule).toHaveBeenCalled()
