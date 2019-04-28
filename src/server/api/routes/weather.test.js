@@ -11,7 +11,7 @@ describe('weather', function () {
   describe('#function (req, res)', function () {
     describe('Config', async () => {
       beforeEach(() => {
-        weatherClient.mockClear()
+        weatherClient.mockResolvedValue({ ok: true, data: 'mockData' })
         res.json.mockClear()
         res.status.mockClear()
       })
@@ -48,7 +48,7 @@ describe('weather', function () {
       await weather(req, res)
       expect(weatherClient).toHaveBeenCalledWith(default_config)
       expect(res.status).toHaveBeenCalledWith(500)
-      expect(res.json).toHaveBeenCalledWith('mockError')
+      expect(res.json).toHaveBeenCalledWith({ reason: 'mockError', result: 'fail' })
     })
   })
 })
