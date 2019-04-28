@@ -6,7 +6,7 @@ import default_config from '../../config'
 import finish from './done'
 import errorHandlerModule from './errorHandler'
 
-module.exports = function (req, res, done) {
+module.exports = async (req, res, done) => {
   var config = req.config
   if (typeof config === 'undefined') {
     config = default_config
@@ -17,14 +17,18 @@ module.exports = function (req, res, done) {
   }
   const errorHandler = errorHandlerModule(slack)
   if (config.openweathermap_key !== '') {
-    fetch(config.weatherUrl + '?zip=' + config.zipCode + ',us&units=imperial&APPID=' + config.openweathermap_key)
-      .then(jsonResponseHandler)
-      .then(function (resu) {
-        res.json(resu)
-        res.status(200)
-        finish(done)
-      })
-      .catch(errorHandler(req, res, done))
+    try {
+      const fetchResult = await fetch(
+        config.weatherUrl + '?zip=' + config.zipCode + ',us&units=imperial&APPID=' + config.openweathermap_key
+      )
+      const jsonResult = await jsonResponseHandler(fetchResult)
+
+      res.json(jsonResult)
+      res.status(200)
+      finish(done)
+    } catch (err) {
+      errorHandler(req, res, done)(err)
+    }
   } else {
     const err = 'weather api key not found in configuration'
     errorHandler(req, res, done)(err)
