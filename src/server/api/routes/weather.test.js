@@ -1,40 +1,27 @@
 import weather from './weather'
-//import doTest from './do_test'
 
-import fetch from 'isomorphic-fetch'
+import default_config from '../../config'
+import weatherClient from '../clients/weatherClient'
 
-import slackPost from '../data/slack'
-import errorHandlerModule, { errorFunc } from './errorHandler'
-import jsonResponseHandler from '../../jsonResponseHandler'
-import weatherMockData from './__mocks__/weatherMockData'
 import res from './__mocks__/res'
-jest.mock('../data/slack')
 jest.mock('../../config')
-jest.mock('./errorHandler')
-jest.mock('../../jsonResponseHandler')
+jest.mock('../clients/weatherClient')
 
 describe('weather', function () {
-  const mockFetchReturnValue = { json: () => weatherMockData }
-  beforeAll(() => {
-    fetch.mockResolvedValue(mockFetchReturnValue)
-  })
-  afterEach(() => {
-    fetch.mockClear()
-  })
   describe('#function (req, res)', function () {
     describe('Config', async () => {
+      beforeEach(() => {
+        weatherClient.mockClear()
+        res.json.mockClear()
+        res.status.mockClear()
+      })
       it('should use default config when req.config is undefined', async () => {
         const req = {}
 
         await weather(req, res)
-        expect(slackPost).toHaveBeenCalledWith('defaultSlackUrl')
-        expect(errorHandlerModule).toHaveBeenCalled()
-        expect(fetch).toHaveBeenCalledWith(
-          'defaultWeather?zip=defaultZipCode,us&units=imperial&APPID=defaultOpenWeatherMapKey'
-        )
-        expect(jsonResponseHandler).toHaveBeenCalledWith(mockFetchReturnValue)
+        expect(weatherClient).toHaveBeenCalledWith(default_config)
         expect(res.status).toHaveBeenCalledWith(200)
-        expect(res.json).toHaveBeenCalledWith(weatherMockData)
+        expect(res.json).toHaveBeenCalledWith('mockData')
       })
 
       it('should use req.config when req.config is defined', async () => {
@@ -48,54 +35,20 @@ describe('weather', function () {
         }
 
         await weather(req, res)
-        expect(slackPost).toHaveBeenCalledWith('passedSlackUrl')
-        expect(errorHandlerModule).toHaveBeenCalled()
-        expect(fetch).toHaveBeenCalledWith(
-          'passedWeather?zip=passedZipCode,us&units=imperial&APPID=passedOpenWeatherMapKey'
-        )
-        expect(jsonResponseHandler).toHaveBeenCalledWith(mockFetchReturnValue)
+        expect(weatherClient).toHaveBeenCalledWith(req.config)
         expect(res.status).toHaveBeenCalledWith(200)
-        expect(res.json).toHaveBeenCalledWith(weatherMockData)
-      })
-    })
-
-    describe('Slack', async () => {
-      it('should use create a slack object when req.slack is undefined', async () => {
-        const req = {}
-
-        await weather(req, res)
-        expect(slackPost).toHaveBeenCalledWith('defaultSlackUrl')
-        expect(errorHandlerModule).toHaveBeenCalled()
-      })
-
-      it('should use req.slack when req.slack is defined', async () => {
-        const req = {
-          slack: jest.fn()
-        }
-        await weather(req, res)
-        expect(errorHandlerModule).toHaveBeenCalledWith(req.slack)
+        expect(res.json).toHaveBeenCalledWith('mockData')
       })
     })
 
     it('should error when the fetch fails', async () => {
-      const fetchMockError = 'Mock error'
-      fetch.mockRejectedValue(fetchMockError)
+      weatherClient.mockResolvedValue({ ok: false, error: 'mockError' })
       const req = {}
 
       await weather(req, res)
-      expect(errorHandlerModule).toHaveBeenCalled()
-      expect(fetch).toHaveBeenCalledWith(
-        'defaultWeather?zip=defaultZipCode,us&units=imperial&APPID=defaultOpenWeatherMapKey'
-      )
-      expect(errorFunc).toHaveBeenCalledWith(fetchMockError)
-    })
-
-    it('should error when openweathermap_key is not defined', async () => {
-      const req = { config: { openweathermap_key: '' } }
-
-      await weather(req, res)
-      expect(errorHandlerModule).toHaveBeenCalled()
-      expect(errorFunc).toHaveBeenCalledWith('weather api key not found in configuration')
+      expect(weatherClient).toHaveBeenCalledWith(default_config)
+      expect(res.status).toHaveBeenCalledWith(500)
+      expect(res.json).toHaveBeenCalledWith('mockError')
     })
   })
 })

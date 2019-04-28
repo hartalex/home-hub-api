@@ -6,6 +6,10 @@ jest.unmock('isomorphic-fetch')
 // This requires that the openweathermap_key be set
 // in the env vars
 describe('weather integration', function () {
+  beforeEach(() => {
+    res.json.mockClear()
+    res.status.mockClear()
+  })
   describe('#function (req, res)', function () {
     describe('Success', async () => {
       it('should use default config', async () => {
