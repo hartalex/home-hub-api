@@ -1,1 +1,1 @@
-export default jest.fn().mockResolvedValue({})
+export default jest.fn().mockResolvedValue({ json: () => {} })

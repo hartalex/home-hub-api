@@ -1,1 +1,1 @@
-export default jest.fn().mockReturnValue({})
+export default jest.fn().mockImplementation((fetchResult) => fetchResult.json())

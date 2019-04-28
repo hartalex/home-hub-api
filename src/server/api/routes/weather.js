@@ -21,6 +21,7 @@ module.exports = function (req, res, done) {
       .then(jsonResponseHandler)
       .then(function (resu) {
         res.json(resu)
+        res.status(200)
         finish(done)
       })
       .catch(errorHandler(req, res, done))
