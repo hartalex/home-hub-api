@@ -3,10 +3,9 @@ import jsonResponseHandler from '../../jsonResponseHandler'
 import fetch from 'isomorphic-fetch'
 import slackPost from '../data/slack'
 import default_config from '../../config'
-import finish from './done'
 import errorHandlerModule from './errorHandler'
 
-module.exports = async (req, res, done) => {
+module.exports = async (req, res) => {
   var config = req.config
   if (typeof config === 'undefined') {
     config = default_config
@@ -25,12 +24,11 @@ module.exports = async (req, res, done) => {
 
       res.json(jsonResult)
       res.status(200)
-      finish(done)
     } catch (err) {
-      errorHandler(req, res, done)(err)
+      errorHandler(req, res)(err)
     }
   } else {
     const err = 'weather api key not found in configuration'
-    errorHandler(req, res, done)(err)
+    errorHandler(req, res)(err)
   }
 }
