@@ -1,0 +1,7 @@
+<script src="../node_modules/socket.io-client/dist/socket.io.js"></script>
+<script>
+  var socket = io('http://localhost:8080/buttonSocket');
+  socket.on('button', function (data) {
+    console.log(data);
+    });
+</script>

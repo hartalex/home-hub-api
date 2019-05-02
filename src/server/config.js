@@ -7,5 +7,6 @@ module.exports = {
   wunderground_key: process.env.wunderground_key,
   openweathermap_key: process.env.openweathermap_key,
   slackUrl: process.env.slackUrl,
-  weatherUrl: 'https://api.openweathermap.org/data/2.5/weather'
+  weatherUrl: 'https://api.openweathermap.org/data/2.5/weather',
+  url: 'home-hub-api.default.svc.cluster.local'
 }
