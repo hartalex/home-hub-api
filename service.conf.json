@@ -2,7 +2,7 @@
   "kind": "Service",
   "apiVersion": "v1",
   "metadata": {
-    "name": "home-hub-api-nodeport"
+    "name": "home-hub-api"
   },
   "spec": {
     "selector": {
@@ -10,12 +10,12 @@
     },
     "ports": [
       {
-        "name": "api-hub-http",
+        "name": "http",
         "protocol": "TCP",
         "port": 80,
         "targetPort": 8220
       }
     ],
-    "type": "NodePort"
+    "type": "LoadBalancer"
   }
 }
